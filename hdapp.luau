@@ -1,7 +1,7 @@
 -- connected discord github
 -- Discord: .emrr. 
 -- Roblox: emrr4dt
-
+--!strict
 
 -- this script is an advanced ai npc system runing on roblox using the gemini api
 -- strict type checking is enabled to prevent errors and keep data safe
