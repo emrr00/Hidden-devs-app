@@ -6,6 +6,8 @@
 -- strict type checking is enabled to prevent errors and keep data safe
 -- the system has dynamic pathfinding maid stuff and player memory tracking
 
+-- Say hello or sum to chat with AI 
+
 -- http service to decode json and handle web stuff
 local HttpService = game:GetService("HttpService")
 
