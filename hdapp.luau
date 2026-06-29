@@ -1,7 +1,7 @@
 -- connected discord github
--- Discord: .emrr. 
+-- Discord: .emrr.
 -- Roblox: emrr4dt
---!strict
+
 
 -- this script is an advanced ai npc system runing on roblox using the gemini api
 -- strict type checking is enabled to prevent errors and keep data safe
@@ -433,7 +433,7 @@ Format: {"action": "FOLLOW|STOP|TALK", "reply": "Your response here"}
 		}
 	}
 	
-	-- the setings for sending the api reqest
+	-- the settings for sending the api request
 	local requestOptions = {
 		Url = API_URL,
 		Method = "POST",
@@ -445,7 +445,6 @@ Format: {"action": "FOLLOW|STOP|TALK", "reply": "Your response here"}
 	
 	-- spawns task so it dont halt game
 	task.spawn(function()
-		print("[AI_NPC] Sending request to Gemini API...")
 		-- pcall it just incase it fails
 		local success, response = pcall(function()
 			return HttpService:RequestAsync(requestOptions)
@@ -453,23 +452,19 @@ Format: {"action": "FOLLOW|STOP|TALK", "reply": "Your response here"}
 		
 		self.IsProcessing = false -- not busy aymore
 		
-		-- if it fails tell erro
+		-- if it fails tell error
 		if not success then
-			warn("[AI_NPC] HTTP Request failed with error:", response)
-			Chat:Chat(Head, "Bağlantı hatası oluştu.", Enum.ChatColor.Red)
+			Chat:Chat(Head, "Connection error occurred.", Enum.ChatColor.Red)
 			return
 		end
 		
 		-- check if is sucesss
 		if not response.Success then
-			warn("[AI_NPC] API returned HTTP error status:", response.StatusCode)
-			warn("[AI_NPC] Response body:", response.Body)
-			Chat:Chat(Head, "API hatası: " .. tostring(response.StatusCode), Enum.ChatColor.Red)
+			Chat:Chat(Head, "API error: " .. tostring(response.StatusCode), Enum.ChatColor.Red)
 			return
 		end
 		
-		print("[AI_NPC] API Response received successfully. Decoding...")
-		-- decod json bak to table
+		-- decod json back to table
 		local decodeSuccess, decodedBody = pcall(function()
 			return HttpService:JSONDecode(response.Body)
 		end)
@@ -482,12 +477,12 @@ Format: {"action": "FOLLOW|STOP|TALK", "reply": "Your response here"}
 				return HttpService:JSONDecode(rawText)
 			end)
 			
-			-- if it workd update the stats
+			-- if it worked update the stats
 			if parseSuccess and parsedData.action and parsedData.reply then
 				self:AddHistory(player, "model", parsedData.reply) -- add to bot reply
 				Chat:Chat(Head, parsedData.reply, Enum.ChatColor.White) -- make the bubbles
 				
-				-- decids wat to do on action
+				-- decides what to do on action
 				if parsedData.action == "FOLLOW" then
 					self:FollowPlayer(player)
 				elseif parsedData.action == "STOP" then
@@ -497,7 +492,7 @@ Format: {"action": "FOLLOW|STOP|TALK", "reply": "Your response here"}
 			end
 		end
 		-- if fails say nothing
-		Chat:Chat(Head, "Anlayamadım.", Enum.ChatColor.Blue)
+		Chat:Chat(Head, "I couldn't understand.", Enum.ChatColor.Blue)
 	end)
 end
 
@@ -506,7 +501,7 @@ local npcInstance = AI_NPC.new()
 
 -- when plyer joins
 Players.PlayerAdded:Connect(function(player)
-	-- whn pleyer chats
+	-- when pleyer chats
 	player.Chatted:Connect(function(message)
 		local character = player.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -515,7 +510,7 @@ Players.PlayerAdded:Connect(function(player)
 			npcInstance.LookTarget = root.Position
 		end
 		
-		-- send ths msg to th api
+		-- send ths msg to the api
 		npcInstance:ProcessPlayerMessage(player, message)
 	end)
 end)
